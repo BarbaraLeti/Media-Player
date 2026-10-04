@@ -12,6 +12,10 @@ O programa será iniciado no terminal e exibirá o prompt:
 
 mediap>
 
+## Para executar o pytest:
+
+py -m pytest
+
 ## Comandos disponíveis
 
 library load library.json - carrega a biblioteca de músicas;
