@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "titulo": "Sinais de Fogo",
+    "artista": "Preta Gil",
+    "duracao": 336,
+    "rating": 3,
+    "data_adicao": "2025-02-10"
+  },
+  {
+    "id": 2,
+    "titulo": "Superscar",
+    "artista": "Adela",
+    "duracao": 314,
+    "rating": 5,
+    "data_adicao": "2025-02-12"
+  },
+  {
+    "id": 3,
+    "titulo": "That Way",
+    "artista": "Katseye",
+    "duracao": 256,
+    "rating": 4,
+    "data_adicao": "2025-02-14"
+  },
+  {
+    "id": 4,
+    "titulo": "purple",
+    "artista": "Olivia Rodrigo",
+    "duracao": 400,
+    "rating": 5,
+    "data_adicao": "2026-08-16"
+  },
+  {
+    "id": 5,
+    "titulo": "Busy Woman",
+    "artista": "Sabrina Carpenter",
+    "duracao": 307,
+    "rating": 4,
+    "data_adicao": "2025-02-18"
+  },
+  {
+    "id": 6,
+    "titulo": "Bang",
+    "artista": "Anitta",
+    "duracao": 336,
+    "rating": 4,
+    "data_adicao": "2025-02-20"
+  },
+  {
+    "id": 7,
+    "titulo": "Beijos, Blues e Poesia",
+    "artista": "Calcinha Preta",
+    "duracao": 313,
+    "rating": 5,
+    "data_adicao": "2025-02-22"
+  },
+  {
+    "id": 8,
+    "titulo": "Dangerously in Love",
+    "artista": "Beyonce",
+    "duracao": 453,
+    "rating": 5,
+    "data_adicao": "2025-02-24"
+  },
+  {
+    "id": 9,
+    "titulo": "Tempos Modernos",
+    "artista": "Lulu Santos",
+    "duracao": 345,
+    "rating": 3,
+    "data_adicao": "2025-02-26"
+  },
+  {
+    "id": 10,
+    "titulo": "Eduardo e Monica",
+    "artista": "Legiao Urbana",
+    "duracao": 509,
+    "rating": 1,
+    "data_adicao": "2025-02-28"
+  }
+]
