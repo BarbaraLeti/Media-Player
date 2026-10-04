@@ -27,9 +27,9 @@ def test_up_next_precedence():
     t_queue = Track(3, "Fila 1", "Artista", 200, 5, "2026-01-01")
     
     player.library = {1: t1, 2: t2, 3: t_queue}
-    player.new_playlist("Teste")
-    player.add_to_playlist(1)
-    player.add_to_playlist(2)
+    player.nova_playlist("Teste")
+    player.adicionar_musica(1)
+    player.adicionar_musica(2)
     
     player.up_next.append(t_queue)
     
@@ -50,14 +50,14 @@ def test_save_load_state(tmp_path):
     player = MediaPlayer()
     t1 = Track(1, "Track 1", "Artista 1", 100, 5, "2026-01-01")
     player.library = {1: t1}
-    player.new_playlist("Minha")
-    player.add_to_playlist(1)
+    player.nova_playlist("Minha")
+    player.adicionar_musica(1)
     
     file_path = tmp_path / "test_state.json"
-    player.save_state(str(file_path))
+    player.salvar_estado(str(file_path))
     
     new_player = MediaPlayer()
-    new_player.load_state(str(file_path))
+    new_player.carregar_estado(str(file_path))
     
     assert new_player.playlist_name == "Minha"
     assert len(new_player.playlist) == 1
