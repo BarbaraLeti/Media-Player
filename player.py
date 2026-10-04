@@ -5,6 +5,19 @@ from datetime import datetime
 from mediap.models import Track
 from mediap.doubly_linked_list import DoublyLinkedList
 
+
+def pegar_rating(t):
+    return t.rating
+
+def pegar_titulo(t):
+    return t.titulo
+
+def pegar_artista(t):
+    return t.artista
+
+def pegar_id(t):
+    return t.id
+
 class MediaPlayer:
     def __init__(self):
         self.library = {}
@@ -23,30 +36,38 @@ class MediaPlayer:
             data_adicao=str(dados["data_adicao"])
         )
 
-    def load_library(self, filepath: str):
-        with open(filepath, 'r') as f:
-            data = json.load(f)
+    def carregar_biblioteca(self, arquivo: str):
+        with open(arquivo, 'r') as f:
+            dados = json.load(f)
             self.library = {
                 item["id"]: self.criar_track(item)
-                 for item in data
+                 for item in dados
             }
 
-    def list_library(self, by="id"):
+    def listar_biblioteca(self, por="id"):
         tracks = list(self.library.values())
-        if by in ["rating", "title", "artist"]:
-            key_map = {"rating": lambda t: t.rating, "title": lambda t: t.titulo, "artist": lambda t: t.artista}
-            tracks.sort(key=key_map[by])
+
+        if por == "rating":
+            tracks.sort(key=pegar_rating)
+
+        elif por == "title":
+            tracks.sort(key=pegar_titulo)
+
+        elif por == "artist":
+            tracks.sort(key=pegar_artista)
+
         else:
-            tracks.sort(key=lambda t: t.id)
+            tracks.sort(key=pegar_id)
+
         return tracks
 
-    def new_playlist(self, name: str):
+    def nova_playlist(self, name: str):
         self.playlist = DoublyLinkedList()
         self.playlist_name = name
 
-    def add_to_playlist(self, track_id: int):
-        if track_id in self.library:
-            self.playlist.add(self.library[track_id])
+    def adicionar_musica(self, musica_id: int):
+        if musica_id in self.library:
+            self.playlist.add(self.library[musica_id])
 
     def _record_history(self, track: Track):
         timestamp = datetime.now().strftime("%H:%M:%S")
@@ -84,26 +105,26 @@ class MediaPlayer:
             priority = -10 * track.rating + penalty
             pq.put((priority, track.id, track))
 
-        self.new_playlist("Smart Shuffle")
+        self.nova_playlist("Smart Shuffle")
         count = 0
         while not pq.empty() and count < n:
             _, _, track = pq.get()
             self.playlist.add(track)
             count += 1
 
-    def save_state(self, filepath: str):
-        cursor_pos = 0
+    def salvar_estado(self, arquivo: str):
+        atual_pos = 0
         if self.playlist.musica_atual:
-            curr = self.playlist.inicio
-            idx = 1
-            while curr:
-                if curr == self.playlist.musica_atual:
-                    cursor_pos = idx
+            atual = self.playlist.inicio
+            indice = 1
+            while atual:
+                if atual == self.playlist.musica_atual:
+                    atual_pos = indice
                     break
-                curr = curr.next
-                idx += 1
+                atual = atual.next
+                indice += 1
 
-        state = {
+        estado = {
             "playlist_name": self.playlist_name,
             "playlist": [
                 {
@@ -115,7 +136,7 @@ class MediaPlayer:
                     "data_adicao": t.data_adicao
                 } for t in self.playlist
             ],
-            "cursor_pos": cursor_pos,
+            "atual_pos": atual_pos,
             "up_next": [
                 {
                     "id": t.id,
@@ -140,28 +161,28 @@ class MediaPlayer:
                 } for item in self.history
             ]
         }
-        with open(filepath, 'w') as f:
-            json.dump(state, f, indent=2)
+        with open(arquivo, 'w') as f:
+            json.dump(estado, f, indent=2)
 
-    def load_state(self, filepath: str):
-        with open(filepath, 'r') as f:
-            state = json.load(f)
+    def carregar_estado(self, arquivo: str):
+        with open(arquivo, 'r') as f:
+            estado = json.load(f)
 
-        self.playlist_name = state["playlist_name"]
+        self.playlist_name = estado["playlist_name"]
         self.playlist = DoublyLinkedList()
-        for t_data in state["playlist"]:
-            self.playlist.add(self.criar_track(t_data))
+        for dado in estado["playlist"]:
+            self.playlist.add(self.criar_track(dado))
 
-        pos = state["cursor_pos"]
+        pos = estado["atual_pos"]
         if pos > 0 and self.playlist.inicio:
-            curr = self.playlist.inicio
+            atual = self.playlist.inicio
             for _ in range(pos - 1):
-                if curr.next:
-                    curr = curr.next
-            self.playlist.musica_atual = curr
+                if atual.next:
+                    atual = atual.next
+            self.playlist.musica_atual = atual
 
         self.up_next = deque(
-            self.criar_track(t) for t_data in state["up_next"]
+            self.criar_track(t) for dado in estado["up_next"]
         )
 
         self.history = deque(
@@ -169,7 +190,7 @@ class MediaPlayer:
                 {
                     "track": self.criar_track(h["track"]),
                     "timestamp": h["timestamp"]
-                } for h in state["history"]
+                } for h in estado["history"]
             ],
             maxlen=20
         )
